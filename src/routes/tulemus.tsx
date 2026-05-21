@@ -100,7 +100,11 @@ function Result() {
         </p>
 
         {/* PDF button — prominent right after summary */}
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+          Kui soovid oma kaardi alles hoida, laadi see PDF-ina alla. Pärast lehe sulgemist
+          vastuseid ei salvestata.
+        </p>
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
           <button
             onClick={onDownload}
             className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-violet-deep px-6 py-3 text-sm font-medium text-primary-foreground hover:opacity-90 sm:w-auto"
@@ -116,6 +120,12 @@ function Result() {
           >
             Muuda vastuseid
           </Link>
+          <button
+            onClick={onRestart}
+            className="inline-flex w-full items-center justify-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium text-navy hover:bg-accent/30 sm:w-auto"
+          >
+            Alusta uuesti
+          </button>
         </div>
       </section>
 
