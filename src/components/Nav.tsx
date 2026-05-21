@@ -16,13 +16,10 @@ export function Nav() {
 
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground sm:flex">
           <Link to="/abi" className="hover:text-navy transition-colors" activeProps={{ className: "text-navy" }}>
-            Kuidas see toimib?
+            Abi
           </Link>
           <Link to="/privaatsus" className="hover:text-navy transition-colors" activeProps={{ className: "text-navy" }}>
             Privaatsus
-          </Link>
-          <Link to="/abi" className="hover:text-navy transition-colors">
-            Abi
           </Link>
         </nav>
 
@@ -40,9 +37,8 @@ export function Nav() {
       {open && (
         <div className="sm:hidden border-t border-border/60 bg-background">
           <nav className="mx-auto flex max-w-6xl flex-col px-5 py-3 text-sm">
-            <Link to="/abi" className="py-2.5 text-foreground" onClick={() => setOpen(false)}>Kuidas see toimib?</Link>
-            <Link to="/privaatsus" className="py-2.5 text-foreground" onClick={() => setOpen(false)}>Privaatsus</Link>
             <Link to="/abi" className="py-2.5 text-foreground" onClick={() => setOpen(false)}>Abi</Link>
+            <Link to="/privaatsus" className="py-2.5 text-foreground" onClick={() => setOpen(false)}>Privaatsus</Link>
           </nav>
         </div>
       )}

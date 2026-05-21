@@ -12,39 +12,52 @@ function Home() {
 
   return (
     <>
-      {/* Hero */}
-      <section className="relative overflow-hidden">
+      {/* Hero — fills first viewport, calm and centered */}
+      <section className="relative flex min-h-[calc(100svh-65px)] items-center overflow-hidden">
         <div className="pointer-events-none absolute inset-0 -z-10">
-          <FlowingLines className="h-full w-full opacity-90" />
+          <FlowingLines className="h-full w-full" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background" />
         </div>
 
-        <div className="mx-auto max-w-3xl px-5 pt-16 pb-24 text-center sm:px-8 sm:pt-24 sm:pb-32">
-          <h1 className="font-serif text-4xl font-semibold tracking-tight text-navy text-balance sm:text-6xl">
+        <div className="mx-auto w-full max-w-2xl px-5 py-16 text-center sm:px-8 sm:py-24">
+          <h1 className="font-serif text-[2.5rem] leading-[1.08] font-semibold tracking-tight text-navy text-balance sm:text-6xl">
             Sa ei pea kohe teadma vastust.
           </h1>
-          <p className="mx-auto mt-6 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="mx-auto mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
             Otsuse kaart aitab sul lahti mõtestada suure või segase otsuse eri tahud
             ja näha selgemalt, mis seda mõjutab.
           </p>
 
-          <div className="mt-9 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
+          <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
             <Link
               to="/kaardista"
-              className="inline-flex w-full items-center justify-center rounded-full bg-violet-deep px-6 py-3 text-sm font-medium text-primary-foreground shadow-sm transition hover:opacity-90 sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-full bg-violet-deep px-7 py-3.5 text-sm font-medium text-primary-foreground shadow-sm transition hover:opacity-90 sm:w-auto"
             >
               Kaardista oma mõte
             </Link>
             <button
               onClick={scrollToExplain}
-              className="inline-flex w-full items-center justify-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium text-navy transition hover:bg-accent/30 sm:w-auto"
+              className="inline-flex w-full items-center justify-center rounded-full border border-border bg-card/80 px-7 py-3.5 text-sm font-medium text-navy backdrop-blur-sm transition hover:bg-accent/30 sm:w-auto"
             >
               Uuri lähemalt
             </button>
           </div>
 
-          <p className="mt-5 text-xs text-muted-foreground">
+          <p className="mt-6 text-xs text-muted-foreground">
             Võtab umbes 5–7 minutit. Vastuseid ei salvestata.
           </p>
+
+          {/* Soft scroll hint */}
+          <button
+            onClick={scrollToExplain}
+            aria-label="Keri allapoole"
+            className="mx-auto mt-14 flex flex-col items-center gap-1.5 text-violet-soft/70 transition hover:text-violet-deep"
+          >
+            <span className="text-[10px] uppercase tracking-[0.2em]">Keri</span>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
+              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </button>
         </div>
       </section>
 

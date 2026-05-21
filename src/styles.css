@@ -117,6 +117,18 @@
 @keyframes draw {
   to { stroke-dashoffset: 0; }
 }
-.animate-drift { animation: drift 14s ease-in-out infinite; }
-.animate-drift-slow { animation: drift-slow 22s ease-in-out infinite; }
-.animate-breathe { animation: breathe 6s ease-in-out infinite; }
+@keyframes float-soft {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(3px, -4px); }
+}
+.animate-drift { animation: drift 18s ease-in-out infinite; transform-origin: center; }
+.animate-drift-slow { animation: drift-slow 26s ease-in-out infinite; transform-origin: center; }
+.animate-breathe { animation: breathe 7s ease-in-out infinite; }
+.animate-breathe-slow { animation: breathe 11s ease-in-out infinite; }
+.animate-float-soft { animation: float-soft 9s ease-in-out infinite; }
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-drift, .animate-drift-slow, .animate-breathe, .animate-breathe-slow, .animate-float-soft {
+    animation: none !important;
+  }
+}
