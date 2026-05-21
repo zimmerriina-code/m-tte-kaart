@@ -10,12 +10,18 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrivaatsusRouteImport } from './routes/privaatsus'
+import { Route as KaardistaRouteImport } from './routes/kaardista'
 import { Route as AbiRouteImport } from './routes/abi'
 import { Route as IndexRouteImport } from './routes/index'
 
 const PrivaatsusRoute = PrivaatsusRouteImport.update({
   id: '/privaatsus',
   path: '/privaatsus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KaardistaRoute = KaardistaRouteImport.update({
+  id: '/kaardista',
+  path: '/kaardista',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AbiRoute = AbiRouteImport.update({
@@ -32,30 +38,34 @@ const IndexRoute = IndexRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/abi': typeof AbiRoute
+  '/kaardista': typeof KaardistaRoute
   '/privaatsus': typeof PrivaatsusRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/abi': typeof AbiRoute
+  '/kaardista': typeof KaardistaRoute
   '/privaatsus': typeof PrivaatsusRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/abi': typeof AbiRoute
+  '/kaardista': typeof KaardistaRoute
   '/privaatsus': typeof PrivaatsusRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/abi' | '/privaatsus'
+  fullPaths: '/' | '/abi' | '/kaardista' | '/privaatsus'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/abi' | '/privaatsus'
-  id: '__root__' | '/' | '/abi' | '/privaatsus'
+  to: '/' | '/abi' | '/kaardista' | '/privaatsus'
+  id: '__root__' | '/' | '/abi' | '/kaardista' | '/privaatsus'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AbiRoute: typeof AbiRoute
+  KaardistaRoute: typeof KaardistaRoute
   PrivaatsusRoute: typeof PrivaatsusRoute
 }
 
@@ -66,6 +76,13 @@ declare module '@tanstack/react-router' {
       path: '/privaatsus'
       fullPath: '/privaatsus'
       preLoaderRoute: typeof PrivaatsusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kaardista': {
+      id: '/kaardista'
+      path: '/kaardista'
+      fullPath: '/kaardista'
+      preLoaderRoute: typeof KaardistaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/abi': {
@@ -88,6 +105,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AbiRoute: AbiRoute,
+  KaardistaRoute: KaardistaRoute,
   PrivaatsusRoute: PrivaatsusRoute,
 }
 export const routeTree = rootRouteImport
