@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { loadData, type DecisionData } from "../lib/decision-store";
+import { clearData, loadData, type DecisionData } from "../lib/decision-store";
 import { buildInterpretation } from "../lib/interpretation";
 import { buildMapItems, DecisionMap } from "../components/DecisionMap";
 import { generatePdf } from "../lib/pdf";
