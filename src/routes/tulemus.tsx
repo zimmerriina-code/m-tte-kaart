@@ -197,6 +197,12 @@ function Result() {
         >
           Muuda vastuseid
         </Link>
+        <button
+          onClick={onRestart}
+          className="inline-flex w-full items-center justify-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium text-navy hover:bg-accent/30 sm:w-auto"
+        >
+          Alusta uuesti
+        </button>
       </section>
     </main>
   );
