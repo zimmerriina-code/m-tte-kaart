@@ -10,11 +10,17 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as PrivaatsusRouteImport } from './routes/privaatsus'
+import { Route as AbiRouteImport } from './routes/abi'
 import { Route as IndexRouteImport } from './routes/index'
 
 const PrivaatsusRoute = PrivaatsusRouteImport.update({
   id: '/privaatsus',
   path: '/privaatsus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AbiRoute = AbiRouteImport.update({
+  id: '/abi',
+  path: '/abi',
   getParentRoute: () => rootRouteImport,
 } as any)
 const IndexRoute = IndexRouteImport.update({
@@ -25,27 +31,31 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/abi': typeof AbiRoute
   '/privaatsus': typeof PrivaatsusRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/abi': typeof AbiRoute
   '/privaatsus': typeof PrivaatsusRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/abi': typeof AbiRoute
   '/privaatsus': typeof PrivaatsusRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/privaatsus'
+  fullPaths: '/' | '/abi' | '/privaatsus'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/privaatsus'
-  id: '__root__' | '/' | '/privaatsus'
+  to: '/' | '/abi' | '/privaatsus'
+  id: '__root__' | '/' | '/abi' | '/privaatsus'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AbiRoute: typeof AbiRoute
   PrivaatsusRoute: typeof PrivaatsusRoute
 }
 
@@ -56,6 +66,13 @@ declare module '@tanstack/react-router' {
       path: '/privaatsus'
       fullPath: '/privaatsus'
       preLoaderRoute: typeof PrivaatsusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/abi': {
+      id: '/abi'
+      path: '/abi'
+      fullPath: '/abi'
+      preLoaderRoute: typeof AbiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/': {
@@ -70,6 +87,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AbiRoute: AbiRoute,
   PrivaatsusRoute: PrivaatsusRoute,
 }
 export const routeTree = rootRouteImport
