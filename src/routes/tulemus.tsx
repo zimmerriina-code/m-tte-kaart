@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { loadData, type DecisionData } from "../lib/decision-store";
+import { useNavigate } from "@tanstack/react-router";
+import { clearData, loadData, type DecisionData } from "../lib/decision-store";
 import { buildInterpretation } from "../lib/interpretation";
 import { buildMapItems, DecisionMap } from "../components/DecisionMap";
 import { generatePdf } from "../lib/pdf";
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/tulemus")({
 
 function Result() {
   const [data, setData] = useState<DecisionData | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setData(loadData());
@@ -57,6 +59,11 @@ function Result() {
     if (interp) generatePdf(data, interp);
   };
 
+  const onRestart = () => {
+    clearData();
+    navigate({ to: "/kaardista" });
+  };
+
   return (
     <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-16">
       <header className="text-center">
@@ -93,7 +100,11 @@ function Result() {
         </p>
 
         {/* PDF button — prominent right after summary */}
-        <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+        <p className="mt-6 text-sm leading-relaxed text-muted-foreground">
+          Kui soovid oma kaardi alles hoida, laadi see PDF-ina alla. Pärast lehe sulgemist
+          vastuseid ei salvestata.
+        </p>
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:items-center sm:flex-wrap">
           <button
             onClick={onDownload}
             className="inline-flex w-full items-center justify-center gap-2 rounded-full bg-violet-deep px-6 py-3 text-sm font-medium text-primary-foreground hover:opacity-90 sm:w-auto"
@@ -109,6 +120,12 @@ function Result() {
           >
             Muuda vastuseid
           </Link>
+          <button
+            onClick={onRestart}
+            className="inline-flex w-full items-center justify-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium text-navy hover:bg-accent/30 sm:w-auto"
+          >
+            Alusta uuesti
+          </button>
         </div>
       </section>
 
@@ -180,6 +197,12 @@ function Result() {
         >
           Muuda vastuseid
         </Link>
+        <button
+          onClick={onRestart}
+          className="inline-flex w-full items-center justify-center rounded-full border border-border bg-card px-6 py-3 text-sm font-medium text-navy hover:bg-accent/30 sm:w-auto"
+        >
+          Alusta uuesti
+        </button>
       </section>
     </main>
   );

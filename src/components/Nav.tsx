@@ -4,6 +4,7 @@ import { useState } from "react";
 
 export function Nav() {
   const [open, setOpen] = useState(false);
+  const linkClass = "hover:text-navy transition-colors";
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
@@ -15,10 +16,13 @@ export function Nav() {
         </Link>
 
         <nav className="hidden items-center gap-7 text-sm text-muted-foreground sm:flex">
-          <Link to="/abi" className="hover:text-navy transition-colors" activeProps={{ className: "text-navy" }}>
+          <Link to="/kuidas-see-toimib" className={linkClass} activeProps={{ className: "text-navy" }}>
+            Kuidas see toimib?
+          </Link>
+          <Link to="/abi" className={linkClass} activeProps={{ className: "text-navy" }}>
             Abi
           </Link>
-          <Link to="/privaatsus" className="hover:text-navy transition-colors" activeProps={{ className: "text-navy" }}>
+          <Link to="/privaatsus" className={linkClass} activeProps={{ className: "text-navy" }}>
             Privaatsus
           </Link>
         </nav>
@@ -37,6 +41,7 @@ export function Nav() {
       {open && (
         <div className="sm:hidden border-t border-border/60 bg-background">
           <nav className="mx-auto flex max-w-6xl flex-col px-5 py-3 text-sm">
+            <Link to="/kuidas-see-toimib" className="py-2.5 text-foreground" onClick={() => setOpen(false)}>Kuidas see toimib?</Link>
             <Link to="/abi" className="py-2.5 text-foreground" onClick={() => setOpen(false)}>Abi</Link>
             <Link to="/privaatsus" className="py-2.5 text-foreground" onClick={() => setOpen(false)}>Privaatsus</Link>
           </nav>

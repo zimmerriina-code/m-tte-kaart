@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as TulemusRouteImport } from './routes/tulemus'
 import { Route as PrivaatsusRouteImport } from './routes/privaatsus'
+import { Route as KuidasSeeToimibRouteImport } from './routes/kuidas-see-toimib'
 import { Route as KaardistaRouteImport } from './routes/kaardista'
 import { Route as AbiRouteImport } from './routes/abi'
 import { Route as IndexRouteImport } from './routes/index'
@@ -23,6 +24,11 @@ const TulemusRoute = TulemusRouteImport.update({
 const PrivaatsusRoute = PrivaatsusRouteImport.update({
   id: '/privaatsus',
   path: '/privaatsus',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const KuidasSeeToimibRoute = KuidasSeeToimibRouteImport.update({
+  id: '/kuidas-see-toimib',
+  path: '/kuidas-see-toimib',
   getParentRoute: () => rootRouteImport,
 } as any)
 const KaardistaRoute = KaardistaRouteImport.update({
@@ -45,6 +51,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/abi': typeof AbiRoute
   '/kaardista': typeof KaardistaRoute
+  '/kuidas-see-toimib': typeof KuidasSeeToimibRoute
   '/privaatsus': typeof PrivaatsusRoute
   '/tulemus': typeof TulemusRoute
 }
@@ -52,6 +59,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/abi': typeof AbiRoute
   '/kaardista': typeof KaardistaRoute
+  '/kuidas-see-toimib': typeof KuidasSeeToimibRoute
   '/privaatsus': typeof PrivaatsusRoute
   '/tulemus': typeof TulemusRoute
 }
@@ -60,21 +68,42 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/abi': typeof AbiRoute
   '/kaardista': typeof KaardistaRoute
+  '/kuidas-see-toimib': typeof KuidasSeeToimibRoute
   '/privaatsus': typeof PrivaatsusRoute
   '/tulemus': typeof TulemusRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/abi' | '/kaardista' | '/privaatsus' | '/tulemus'
+  fullPaths:
+    | '/'
+    | '/abi'
+    | '/kaardista'
+    | '/kuidas-see-toimib'
+    | '/privaatsus'
+    | '/tulemus'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/abi' | '/kaardista' | '/privaatsus' | '/tulemus'
-  id: '__root__' | '/' | '/abi' | '/kaardista' | '/privaatsus' | '/tulemus'
+  to:
+    | '/'
+    | '/abi'
+    | '/kaardista'
+    | '/kuidas-see-toimib'
+    | '/privaatsus'
+    | '/tulemus'
+  id:
+    | '__root__'
+    | '/'
+    | '/abi'
+    | '/kaardista'
+    | '/kuidas-see-toimib'
+    | '/privaatsus'
+    | '/tulemus'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AbiRoute: typeof AbiRoute
   KaardistaRoute: typeof KaardistaRoute
+  KuidasSeeToimibRoute: typeof KuidasSeeToimibRoute
   PrivaatsusRoute: typeof PrivaatsusRoute
   TulemusRoute: typeof TulemusRoute
 }
@@ -93,6 +122,13 @@ declare module '@tanstack/react-router' {
       path: '/privaatsus'
       fullPath: '/privaatsus'
       preLoaderRoute: typeof PrivaatsusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/kuidas-see-toimib': {
+      id: '/kuidas-see-toimib'
+      path: '/kuidas-see-toimib'
+      fullPath: '/kuidas-see-toimib'
+      preLoaderRoute: typeof KuidasSeeToimibRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/kaardista': {
@@ -123,6 +159,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AbiRoute: AbiRoute,
   KaardistaRoute: KaardistaRoute,
+  KuidasSeeToimibRoute: KuidasSeeToimibRoute,
   PrivaatsusRoute: PrivaatsusRoute,
   TulemusRoute: TulemusRoute,
 }
