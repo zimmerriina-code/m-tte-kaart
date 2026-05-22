@@ -16,11 +16,6 @@ export interface MapItem {
   nextExamples?: string[];
 }
 
-interface PositionedItem extends MapItem {
-  x: number;
-  y: number;
-  r: number;
-}
 
 interface Props {
   centerText: string;
