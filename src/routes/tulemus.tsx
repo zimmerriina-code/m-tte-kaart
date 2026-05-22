@@ -266,7 +266,7 @@ function Result() {
   );
 }
 
-function SummaryCard({ icon, title, children }: { icon: React.ReactNode; title: string; children: React.ReactNode }) {
+function SummaryCard({ icon, title, children }: { icon: ReactNode; title: string; children: ReactNode }) {
   return (
     <div className="rounded-2xl border border-border bg-card p-6 sm:p-7">
       <div className="flex h-11 w-11 items-center justify-center rounded-full bg-lavender/70 text-violet-deep">
