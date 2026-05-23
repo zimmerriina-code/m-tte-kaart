@@ -3,115 +3,136 @@ interface Props {
   reduced?: boolean;
 }
 
-// Abstract flowing thought-lines. Tangled left → clearer right.
-// Lines breathe softly, drift slowly, and one path briefly forms the logo-like loop.
+// Horizontal flowing thought-lines, tangled in the middle (logo-like loop),
+// smoothing out at the edges. Inspired by the homepage mockup.
 export function FlowingLines({ className, reduced = false }: Props) {
+  // A set of horizontal sinusoidal paths spanning the full width.
+  // Each line has its own amplitude, phase, thickness, opacity.
+  const lines = [
+    { y: 320, amp: 28, k: 1.3, w: 1.0, o: 0.32, hue: 285, phase: 0 },
+    { y: 360, amp: 38, k: 1.0, w: 1.4, o: 0.45, hue: 282, phase: 0.4 },
+    { y: 400, amp: 24, k: 1.6, w: 0.9, o: 0.28, hue: 290, phase: 1.1 },
+    { y: 430, amp: 46, k: 0.9, w: 1.6, o: 0.55, hue: 278, phase: 0.8 },
+    { y: 470, amp: 32, k: 1.2, w: 1.1, o: 0.38, hue: 286, phase: 1.5 },
+    { y: 500, amp: 22, k: 1.7, w: 0.8, o: 0.25, hue: 290, phase: 2.1 },
+    { y: 540, amp: 40, k: 1.0, w: 1.3, o: 0.42, hue: 280, phase: 0.2 },
+  ];
+
+  // Extras for richer left/right "siiruviirulised" texture
+  const extras = !reduced
+    ? [
+        { y: 280, amp: 18, k: 2.1, w: 0.7, o: 0.2, hue: 290, phase: 1.7 },
+        { y: 580, amp: 30, k: 1.4, w: 0.9, o: 0.3, hue: 285, phase: 2.4 },
+        { y: 250, amp: 14, k: 2.4, w: 0.6, o: 0.18, hue: 292, phase: 0.6 },
+        { y: 610, amp: 24, k: 1.8, w: 0.8, o: 0.24, hue: 282, phase: 1.9 },
+      ]
+    : [];
+
   return (
     <svg
       className={className}
-      viewBox="0 0 1200 800"
+      viewBox="0 0 1600 800"
       fill="none"
       preserveAspectRatio="xMidYMid slice"
       aria-hidden="true"
     >
       <defs>
-        <linearGradient id="line-fade" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0.15" />
-          <stop offset="45%" stopColor="oklch(0.55 0.13 285)" stopOpacity="0.55" />
-          <stop offset="100%" stopColor="oklch(0.45 0.13 285)" stopOpacity="0.85" />
+        <linearGradient id="thread-fade" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0" />
+          <stop offset="12%" stopColor="oklch(0.62 0.11 290)" stopOpacity="0.6" />
+          <stop offset="50%" stopColor="oklch(0.45 0.13 285)" stopOpacity="0.95" />
+          <stop offset="88%" stopColor="oklch(0.62 0.11 290)" stopOpacity="0.6" />
+          <stop offset="100%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0" />
         </linearGradient>
-        <linearGradient id="line-fade-2" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0.18" />
-          <stop offset="100%" stopColor="oklch(0.55 0.13 285)" stopOpacity="0.5" />
-        </linearGradient>
-        <linearGradient id="line-fade-3" x1="0" y1="0" x2="1" y2="0">
-          <stop offset="0%" stopColor="oklch(0.62 0.11 290)" stopOpacity="0.1" />
-          <stop offset="100%" stopColor="oklch(0.45 0.13 285)" stopOpacity="0.6" />
+        <linearGradient id="thread-soft" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0" />
+          <stop offset="50%" stopColor="oklch(0.62 0.11 290)" stopOpacity="0.55" />
+          <stop offset="100%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0" />
         </linearGradient>
       </defs>
 
-      {/* Tangled, loose strokes on the left — many overlapping thoughts */}
-      <g className="animate-drift-slow">
-        <path
-          d="M -30 360 C 60 290, 70 460, 170 410 C 240 380, 180 270, 270 310 C 330 340, 280 430, 360 410"
-          stroke="url(#line-fade)" strokeWidth="1.3" opacity="0.55" strokeLinecap="round"
-        />
-        <path
-          d="M 30 300 C 110 260, 90 410, 210 360 C 280 330, 220 240, 320 280"
-          stroke="oklch(0.74 0.09 285)" strokeWidth="0.9" opacity="0.45" strokeLinecap="round"
-        />
-        <path
-          d="M -10 440 C 80 420, 70 500, 200 470 C 260 458, 230 530, 340 500"
-          stroke="oklch(0.74 0.09 285)" strokeWidth="0.8" opacity="0.4" strokeLinecap="round"
-        />
-        {!reduced && (
-          <>
-            <path
-              d="M 20 240 C 100 220, 130 320, 240 290 C 310 270, 280 210, 360 230"
-              stroke="oklch(0.62 0.11 290)" strokeWidth="0.7" opacity="0.35" strokeLinecap="round"
-            />
-            <path
-              d="M 0 520 C 90 500, 100 580, 220 560 C 290 548, 260 600, 360 590"
-              stroke="oklch(0.74 0.09 285)" strokeWidth="0.7" opacity="0.3" strokeLinecap="round"
-            />
-          </>
-        )}
+      {/* Slow horizontal flow group — gentle left-right drift */}
+      <g className="animate-flow-x">
+        {[...lines, ...extras].map((l, i) => (
+          <SinePath key={"a-" + i} l={l} grad="url(#thread-fade)" />
+        ))}
       </g>
 
-      {/* Main flowing thought-line — winds across, forms a brief logo-like loop mid-way */}
-      <g className="animate-drift">
-        <path
-          d="M -40 380
-             C 120 330, 150 440, 290 390
-             C 420 345, 380 250, 530 270
-             C 600 280, 600 340, 660 340
-             C 720 340, 720 290, 680 270
-             C 640 250, 640 320, 700 330
-             C 800 345, 820 250, 940 270
-             C 1040 285, 1100 320, 1240 305"
-          stroke="url(#line-fade)" strokeWidth="2.1" strokeLinecap="round"
-          className="animate-breathe"
-        />
+      {/* Counter-drifting softer layer adds depth */}
+      <g className="animate-flow-x-reverse" opacity="0.7">
+        {lines.slice(0, 4).map((l, i) => (
+          <SinePath
+            key={"b-" + i}
+            l={{ ...l, y: l.y + 6, amp: l.amp * 0.7, phase: l.phase + 1.2, w: l.w * 0.75, o: l.o * 0.7 }}
+            grad="url(#thread-soft)"
+          />
+        ))}
       </g>
 
-      {/* Clearer strokes on the right — thought becoming structured */}
-      <g>
-        <path
-          d="M 560 430 C 720 420, 820 390, 970 390 C 1080 390, 1150 408, 1240 398"
-          stroke="url(#line-fade-3)" strokeWidth="1.7" opacity="0.75" strokeLinecap="round"
-          className="animate-breathe-slow"
-        />
-        {!reduced && (
-          <>
-            <path
-              d="M 640 490 C 780 478, 880 462, 1000 465 C 1100 468, 1160 485, 1240 478"
-              stroke="oklch(0.55 0.13 285)" strokeWidth="1.1" opacity="0.5" strokeLinecap="round"
-            />
-            <path
-              d="M 700 200 C 820 220, 900 200, 1020 220 C 1120 236, 1180 220, 1240 232"
-              stroke="oklch(0.62 0.11 290)" strokeWidth="0.9" opacity="0.35" strokeLinecap="round"
-            />
-          </>
-        )}
-      </g>
-
-      {/* Downward continuation into next section */}
-      {!reduced && (
-        <g opacity="0.5">
+      {/* Central tangled "thought-knot" — the logo-like loop integrated into the flow */}
+      <g
+        className="animate-breathe-slow"
+        transform="translate(800 430)"
+      >
+        <g style={{ animation: "spin-slow 60s linear infinite", transformOrigin: "0 0" }}>
           <path
-            d="M 280 800 C 360 720, 320 640, 440 600"
-            stroke="url(#line-fade-2)" strokeWidth="1" strokeLinecap="round"
+            d="M -48 0 C -48 -28, -24 -36, -2 -30 C 22 -22, 30 4, 14 14 C -4 26, -28 18, -22 -2 C -16 -18, 4 -22, 18 -10 C 32 4, 28 22, 12 26 C -8 32, -34 22, -38 4"
+            stroke="oklch(0.45 0.13 285)"
+            strokeWidth="1.6"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.85"
           />
           <path
-            d="M 920 800 C 880 720, 960 660, 880 590"
-            stroke="url(#line-fade-2)" strokeWidth="1" strokeLinecap="round"
-          />
-          <path
-            d="M 600 800 C 620 720, 580 660, 620 580"
-            stroke="url(#line-fade-2)" strokeWidth="0.8" strokeLinecap="round"
+            d="M -36 -8 C -28 -22, -8 -24, 6 -16 C 22 -6, 24 12, 8 18 C -8 24, -26 14, -22 -2"
+            stroke="oklch(0.55 0.13 285)"
+            strokeWidth="1.1"
+            strokeLinecap="round"
+            fill="none"
+            opacity="0.7"
           />
         </g>
-      )}
+      </g>
     </svg>
+  );
+}
+
+function SinePath({
+  l,
+  grad,
+}: {
+  l: { y: number; amp: number; k: number; w: number; o: number; phase: number };
+  grad: string;
+}) {
+  // Build a smooth sinusoidal path with cubic Bezier segments across viewBox 0..1600.
+  // Amplitude tapers at the very edges so lines feel softer there.
+  const points: { x: number; y: number }[] = [];
+  const steps = 24;
+  for (let i = 0; i <= steps; i++) {
+    const x = (i / steps) * 1600;
+    const t = (x / 1600) * Math.PI * 2 * l.k + l.phase;
+    // Slightly more amplitude in the middle, less at edges
+    const edge = Math.sin((i / steps) * Math.PI); // 0..1..0
+    const y = l.y + Math.sin(t) * l.amp * (0.4 + 0.6 * edge);
+    points.push({ x, y });
+  }
+  let d = `M ${points[0].x} ${points[0].y}`;
+  for (let i = 1; i < points.length; i++) {
+    const p0 = points[i - 1];
+    const p1 = points[i];
+    const cx = (p0.x + p1.x) / 2;
+    d += ` Q ${cx} ${p0.y}, ${cx} ${(p0.y + p1.y) / 2} T ${p1.x} ${p1.y}`;
+  }
+  return (
+    <path
+      d={d}
+      stroke={grad}
+      strokeWidth={l.w}
+      strokeLinecap="round"
+      fill="none"
+      opacity={l.o}
+      className="animate-breathe"
+      style={{ animationDuration: `${8 + (l.phase % 3) * 2}s` }}
+    />
   );
 }
