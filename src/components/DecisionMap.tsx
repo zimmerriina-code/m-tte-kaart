@@ -108,8 +108,20 @@ export function DecisionMap({
               <stop offset="100%" stopColor="oklch(0.9 0.04 290)" />
             </radialGradient>
             <radialGradient id="halo" cx="50%" cy="50%" r="50%">
-              <stop offset="0%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0.2" />
+              <stop offset="0%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0.28" />
               <stop offset="100%" stopColor="oklch(0.74 0.09 285)" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="aura-purple" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stopColor="oklch(0.7 0.13 300)" stopOpacity="0.45" />
+              <stop offset="100%" stopColor="oklch(0.7 0.13 300)" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="aura-lavender" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stopColor="oklch(0.7 0.1 285)" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="oklch(0.7 0.1 285)" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="aura-blue" cx="50%" cy="50%" r="60%">
+              <stop offset="0%" stopColor="oklch(0.7 0.11 260)" stopOpacity="0.4" />
+              <stop offset="100%" stopColor="oklch(0.7 0.11 260)" stopOpacity="0" />
             </radialGradient>
             <radialGradient id="bubble-purple" cx="50%" cy="50%" r="55%">
               <stop offset="0%" stopColor="oklch(0.94 0.045 305)" />
@@ -123,14 +135,21 @@ export function DecisionMap({
               <stop offset="0%" stopColor="oklch(0.94 0.035 250)" />
               <stop offset="100%" stopColor="oklch(0.84 0.06 260)" />
             </radialGradient>
+            <filter id="soft-glow" x="-40%" y="-40%" width="180%" height="180%">
+              <feGaussianBlur stdDeviation="6" result="blur" />
+              <feMerge>
+                <feMergeNode in="blur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
           </defs>
 
-          {/* Halo behind center */}
-          <ellipse cx={CX} cy={CY} rx={280} ry={160} fill="url(#halo)" className="animate-breathe-slow" />
+          {/* Halo behind center — breathing aura */}
+          <ellipse cx={CX} cy={CY} rx={300} ry={180} fill="url(#halo)" className="animate-breathe-slow" />
 
           {/* Section headers */}
           {leftPills.length > 0 && (
-            <text x={120} y={150} textAnchor="middle" style={{ fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 500, fill: "oklch(0.5 0.05 285)", letterSpacing: 1.6 }}>
+            <text x={120} y={150} textAnchor="middle" style={{ fontFamily: "Inter, sans-serif", fontSize: 11, fontWeight: 600, fill: "oklch(0.5 0.05 285)", letterSpacing: 1.8 }}>
               MIS TÕMBAB
             </text>
           )}
@@ -156,16 +175,18 @@ export function DecisionMap({
             const y2 = it.y - uy * (it.r + 4);
             const mx = (x1 + x2) / 2;
             const my = (y1 + y2) / 2;
+            const isHover = hovered === it.id;
             const badgeLabel = it.importance >= 0.95 ? "tugev mõju" : "mõjutab";
             return (
               <g key={"ml-" + it.id}>
                 <path
                   d={`M ${x1} ${y1} Q ${mx + uy * 14} ${my - ux * 14}, ${x2} ${y2}`}
-                  stroke="oklch(0.62 0.11 290)"
-                  strokeWidth={2}
+                  stroke="oklch(0.55 0.13 285)"
+                  strokeWidth={isHover ? 2.8 : 2}
                   fill="none"
-                  opacity={hovered === null ? 0.55 : hovered === it.id ? 0.85 : 0.2}
-                  className="transition-opacity duration-500"
+                  opacity={hovered === null ? 0.55 : isHover ? 1 : 0.18}
+                  className="animate-line-breathe transition-all duration-500"
+                  style={{ animationDelay: `${(it.x % 5) * 0.4}s` }}
                 />
                 <g>
                   <rect x={mx - 40} y={my - 26} width={80} height={20} rx={10} fill="oklch(0.88 0.04 290)" />
@@ -178,74 +199,129 @@ export function DecisionMap({
           })}
 
           {/* Left pill connections */}
-          {leftPills.map((it) => (
-            <path
-              key={"ll-" + it.id}
-              d={`M 195 ${it.y} Q 320 ${it.y}, ${CX - 170} ${CY + (it.y - CY) * 0.18}`}
-              stroke="oklch(0.74 0.09 285)"
-              strokeWidth="1"
-              fill="none"
-              opacity={hovered === null ? 0.4 : hovered === it.id ? 0.75 : 0.12}
-              className="transition-opacity duration-500"
-            />
-          ))}
+          {leftPills.map((it) => {
+            const isHover = hovered === it.id;
+            return (
+              <path
+                key={"ll-" + it.id}
+                d={`M 195 ${it.y} Q 320 ${it.y}, ${CX - 170} ${CY + (it.y - CY) * 0.18}`}
+                stroke="oklch(0.55 0.13 285)"
+                strokeWidth={isHover ? 1.8 : 1}
+                fill="none"
+                opacity={hovered === null ? 0.4 : isHover ? 0.95 : 0.1}
+                className="animate-line-breathe transition-all duration-500"
+                style={{ animationDelay: `${(it.y % 6) * 0.3}s` }}
+              />
+            );
+          })}
           {/* Right pill connections — dashed */}
-          {rightPills.map((it) => (
-            <path
-              key={"rl-" + it.id}
-              d={`M ${W - 195} ${it.y} Q ${W - 320} ${it.y}, ${CX + 170} ${CY + (it.y - CY) * 0.18}`}
-              stroke="oklch(0.62 0.11 290)"
-              strokeWidth="1"
-              fill="none"
-              strokeDasharray="4 5"
-              opacity={hovered === null ? 0.4 : hovered === it.id ? 0.75 : 0.12}
-              className="transition-opacity duration-500"
-            />
-          ))}
+          {rightPills.map((it) => {
+            const isHover = hovered === it.id;
+            return (
+              <path
+                key={"rl-" + it.id}
+                d={`M ${W - 195} ${it.y} Q ${W - 320} ${it.y}, ${CX + 170} ${CY + (it.y - CY) * 0.18}`}
+                stroke="oklch(0.55 0.13 285)"
+                strokeWidth={isHover ? 1.8 : 1}
+                fill="none"
+                strokeDasharray="4 5"
+                opacity={hovered === null ? 0.42 : isHover ? 0.95 : 0.1}
+                className="animate-line-breathe transition-all duration-500"
+                style={{ animationDelay: `${(it.y % 5) * 0.35}s` }}
+              />
+            );
+          })}
 
-          {/* Main influence bubbles */}
+          {/* Main influence bubbles — aura + breathing + bigger serif label */}
           {mains.map((it, idx) => {
             const grad = idx === 0 ? "url(#bubble-purple)" : idx === 1 ? "url(#bubble-lavender)" : "url(#bubble-blue)";
+            const auraGrad = idx === 0 ? "url(#aura-purple)" : idx === 1 ? "url(#aura-lavender)" : "url(#aura-blue)";
+            const driftClass = idx === 0 ? "animate-float-a" : idx === 1 ? "animate-float-b" : "animate-float-c";
+            const isHover = hovered === it.id;
+            const isTop = it.importance >= 0.95;
             return (
               <g
                 key={it.id}
                 onMouseEnter={() => setHovered(it.id)}
                 onMouseLeave={() => setHovered(null)}
                 onClick={() => handleClick(it)}
-                className="cursor-pointer animate-float-soft"
-                style={{
-                  transformOrigin: `${it.x}px ${it.y}px`,
-                  transform: hovered === it.id ? "scale(1.04)" : "scale(1)",
-                  transition: "transform 280ms ease",
-                  animationDelay: `${idx * 0.7}s`,
-                }}
+                className={`cursor-pointer ${driftClass}`}
+                style={{ animationDelay: `${idx * 1.1}s` }}
               >
-                <circle cx={it.x} cy={it.y} r={it.r + 8} fill={grad} opacity="0.3" />
-                <circle cx={it.x} cy={it.y} r={it.r} fill={grad} stroke="oklch(0.55 0.13 285)" strokeWidth="1.1" />
-                {/* Small icon at top */}
-                <g transform={`translate(${it.x}, ${it.y - 32})`} opacity="0.78">
-                  {it.type === "value" ? (
-                    <path d="M 0 -7 L 2.5 -2 L 8 -2 L 3.8 1.5 L 5.5 7 L 0 3.5 L -5.5 7 L -3.8 1.5 L -8 -2 L -2.5 -2 Z" fill="oklch(0.45 0.13 285)" />
-                  ) : (
-                    <g stroke="oklch(0.45 0.13 285)" strokeWidth="1.4" fill="none" strokeLinecap="round">
-                      <circle cx="-5" cy="-2" r="3" />
-                      <circle cx="5" cy="-2" r="3" />
-                      <path d="M -10 6 Q -5 2, 0 5 Q 5 2, 10 6" />
-                    </g>
-                  )}
+                <g
+                  style={{
+                    transformOrigin: `${it.x}px ${it.y}px`,
+                    transform: isHover ? "scale(1.07)" : "scale(1)",
+                    transition: "transform 380ms cubic-bezier(.2,.7,.2,1)",
+                  }}
+                >
+                  {/* Aura glow — stronger on hover */}
+                  <circle
+                    cx={it.x}
+                    cy={it.y}
+                    r={it.r + 38}
+                    fill={auraGrad}
+                    opacity={isHover ? 0.95 : 0.55}
+                    style={{ transition: "opacity 400ms ease" }}
+                  />
+                  <circle cx={it.x} cy={it.y} r={it.r + 8} fill={grad} opacity="0.35" />
+                  <circle
+                    cx={it.x}
+                    cy={it.y}
+                    r={it.r}
+                    fill={grad}
+                    stroke="oklch(0.45 0.13 285)"
+                    strokeWidth={isHover ? 1.8 : 1.1}
+                    style={{ transition: "stroke-width 300ms ease" }}
+                  />
+                  {/* Small icon at top */}
+                  <g transform={`translate(${it.x}, ${it.y - 36})`} opacity="0.78">
+                    {it.type === "value" ? (
+                      <path d="M 0 -7 L 2.5 -2 L 8 -2 L 3.8 1.5 L 5.5 7 L 0 3.5 L -5.5 7 L -3.8 1.5 L -8 -2 L -2.5 -2 Z" fill="oklch(0.45 0.13 285)" />
+                    ) : (
+                      <g stroke="oklch(0.45 0.13 285)" strokeWidth="1.4" fill="none" strokeLinecap="round">
+                        <circle cx="-5" cy="-2" r="3" />
+                        <circle cx="5" cy="-2" r="3" />
+                        <path d="M -10 6 Q -5 2, 0 5 Q 5 2, 10 6" />
+                      </g>
+                    )}
+                  </g>
+                  <text
+                    x={it.x}
+                    y={it.y + 4}
+                    textAnchor="middle"
+                    style={{
+                      fontFamily: "Fraunces, serif",
+                      fontSize: isTop ? 22 : 19,
+                      fontWeight: isTop ? 600 : 500,
+                      fill: "oklch(0.22 0.07 275)",
+                      letterSpacing: "-0.01em",
+                    }}
+                  >
+                    {clip(it.label, 16)}
+                  </text>
+                  <text
+                    x={it.x}
+                    y={it.y + 28}
+                    textAnchor="middle"
+                    style={{
+                      fontFamily: "Inter, sans-serif",
+                      fontSize: 11,
+                      fontWeight: 500,
+                      fill: "oklch(0.5 0.05 285)",
+                      letterSpacing: 0.6,
+                      textTransform: "lowercase",
+                    }}
+                  >
+                    {it.strength}
+                  </text>
                 </g>
-                <text x={it.x} y={it.y + 4} textAnchor="middle" style={{ fontFamily: "Fraunces, serif", fontSize: 18, fontWeight: 600, fill: "oklch(0.27 0.07 275)" }}>
-                  {clip(it.label, 16)}
-                </text>
-                <text x={it.x} y={it.y + 26} textAnchor="middle" style={{ fontFamily: "Inter, sans-serif", fontSize: 11.5, fill: "oklch(0.5 0.05 285)", letterSpacing: 0.3 }}>
-                  {it.strength}
-                </text>
               </g>
             );
           })}
 
           {/* Side pills */}
-          {leftPills.map((it) => (
+          {leftPills.map((it, i) => (
             <PillButton
               key={it.id}
               x={it.x}
@@ -253,12 +329,13 @@ export function DecisionMap({
               label={it.label}
               dashed={false}
               hovered={hovered === it.id}
+              delay={i * 0.6}
               onEnter={() => setHovered(it.id)}
               onLeave={() => setHovered(null)}
               onClick={() => handleClick(it)}
             />
           ))}
-          {rightPills.map((it) => (
+          {rightPills.map((it, i) => (
             <PillButton
               key={it.id}
               x={it.x}
@@ -266,14 +343,15 @@ export function DecisionMap({
               label={it.label}
               dashed
               hovered={hovered === it.id}
+              delay={i * 0.6 + 0.3}
               onEnter={() => setHovered(it.id)}
               onLeave={() => setHovered(null)}
               onClick={() => handleClick(it)}
             />
           ))}
 
-          {/* Center organic decision blob */}
-          <g>
+          {/* Center organic decision blob — breathing, serif headline */}
+          <g className="animate-float-soft" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
             <path
               d={`M ${CX - 175} ${CY}
                   C ${CX - 175} ${CY - 85}, ${CX - 95} ${CY - 100}, ${CX - 10} ${CY - 95}
@@ -281,12 +359,35 @@ export function DecisionMap({
                   C ${CX + 175} ${CY + 85}, ${CX + 85} ${CY + 100}, ${CX} ${CY + 95}
                   C ${CX - 95} ${CY + 90}, ${CX - 175} ${CY + 75}, ${CX - 175} ${CY} Z`}
               fill="url(#center-fill)"
-              stroke="oklch(0.55 0.13 285)"
-              strokeWidth="1.4"
+              stroke="oklch(0.45 0.13 285)"
+              strokeWidth="1.6"
             />
-            <foreignObject x={CX - 155} y={CY - 75} width={310} height={150}>
+            <text
+              x={CX}
+              y={CY - 64}
+              textAnchor="middle"
+              style={{
+                fontFamily: "Inter, sans-serif",
+                fontSize: 10,
+                fontWeight: 600,
+                fill: "oklch(0.55 0.1 285)",
+                letterSpacing: 2,
+              }}
+            >
+              SINU OTSUS
+            </text>
+            <foreignObject x={CX - 158} y={CY - 50} width={316} height={130}>
               <div className="flex h-full w-full items-center justify-center px-2 text-center">
-                <p style={{ fontFamily: "Fraunces, serif", fontWeight: 600, fontSize: 22, lineHeight: 1.22, color: "oklch(0.27 0.07 275)" }}>
+                <p
+                  style={{
+                    fontFamily: "Fraunces, serif",
+                    fontWeight: 600,
+                    fontSize: 26,
+                    lineHeight: 1.18,
+                    letterSpacing: "-0.015em",
+                    color: "oklch(0.22 0.07 275)",
+                  }}
+                >
                   {clip(centerText || "Sinu otsus", 90)}
                 </p>
               </div>
@@ -294,6 +395,7 @@ export function DecisionMap({
           </g>
         </svg>
       </div>
+
 
       {/* Soovitatav järgmine samm — below the map */}
       {nextStepTitle && (
@@ -339,9 +441,9 @@ export function DecisionMap({
 }
 
 function PillButton({
-  x, y, label, dashed, hovered, onEnter, onLeave, onClick,
+  x, y, label, dashed, hovered, delay = 0, onEnter, onLeave, onClick,
 }: {
-  x: number; y: number; label: string; dashed: boolean; hovered: boolean;
+  x: number; y: number; label: string; dashed: boolean; hovered: boolean; delay?: number;
   onEnter: () => void; onLeave: () => void; onClick: () => void;
 }) {
   const text = clip(label, 22);
@@ -351,28 +453,54 @@ function PillButton({
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onClick={onClick}
-      className="cursor-pointer"
-      style={{
-        transformOrigin: `${x}px ${y}px`,
-        transform: hovered ? "scale(1.05)" : "scale(1)",
-        transition: "transform 220ms ease",
-      }}
+      className="cursor-pointer animate-float-soft"
+      style={{ animationDelay: `${delay}s`, transformBox: "fill-box", transformOrigin: "center" }}
     >
-      <rect
-        x={x - width / 2}
-        y={y - 20}
-        width={width}
-        height={40}
-        rx={20}
-        fill="oklch(1 0 0)"
-        stroke="oklch(0.62 0.11 290)"
-        strokeWidth="1"
-        strokeDasharray={dashed ? "4 4" : undefined}
-        opacity={hovered ? 1 : 0.94}
-      />
-      <text x={x} y={y + 5} textAnchor="middle" style={{ fontFamily: "Inter, sans-serif", fontSize: 13, fontWeight: 500, fill: "oklch(0.27 0.07 275)" }}>
-        {text}
-      </text>
+      <g
+        style={{
+          transformOrigin: `${x}px ${y}px`,
+          transform: hovered ? "scale(1.07)" : "scale(1)",
+          transition: "transform 300ms cubic-bezier(.2,.7,.2,1)",
+        }}
+      >
+        {hovered && (
+          <rect
+            x={x - width / 2 - 8}
+            y={y - 28}
+            width={width + 16}
+            height={56}
+            rx={28}
+            fill="oklch(0.7 0.13 290)"
+            opacity="0.18"
+          />
+        )}
+        <rect
+          x={x - width / 2}
+          y={y - 20}
+          width={width}
+          height={40}
+          rx={20}
+          fill="oklch(1 0 0)"
+          stroke={hovered ? "oklch(0.45 0.13 285)" : "oklch(0.62 0.11 290)"}
+          strokeWidth={hovered ? 1.6 : 1}
+          strokeDasharray={dashed ? "4 4" : undefined}
+          opacity={hovered ? 1 : 0.94}
+          style={{ transition: "stroke-width 200ms ease" }}
+        />
+        <text
+          x={x}
+          y={y + 5}
+          textAnchor="middle"
+          style={{
+            fontFamily: "Inter, sans-serif",
+            fontSize: 13,
+            fontWeight: hovered ? 600 : 500,
+            fill: "oklch(0.27 0.07 275)",
+          }}
+        >
+          {text}
+        </text>
+      </g>
     </g>
   );
 }

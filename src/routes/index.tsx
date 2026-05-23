@@ -46,18 +46,6 @@ function Home() {
           <p className="mt-6 text-xs text-muted-foreground">
             Võtab umbes 5–7 minutit. Vastuseid ei salvestata.
           </p>
-
-          {/* Soft scroll hint */}
-          <button
-            onClick={scrollToExplain}
-            aria-label="Keri allapoole"
-            className="mx-auto mt-14 flex flex-col items-center gap-1.5 text-violet-soft/70 transition hover:text-violet-deep"
-          >
-            <span className="text-[10px] uppercase tracking-[0.2em]">Keri</span>
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6">
-              <path d="M6 9l6 6 6-6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </button>
         </div>
       </section>
 

@@ -112,7 +112,7 @@
 }
 @keyframes breathe {
   0%, 100% { opacity: 0.55; }
-  50% { opacity: 0.85; }
+  50% { opacity: 0.9; }
 }
 @keyframes draw {
   to { stroke-dashoffset: 0; }
@@ -121,14 +121,49 @@
   0%, 100% { transform: translate(0, 0); }
   50% { transform: translate(3px, -4px); }
 }
+@keyframes float-a {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(4px, -6px); }
+}
+@keyframes float-b {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-5px, 5px); }
+}
+@keyframes float-c {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(3px, 6px); }
+}
+@keyframes flow-x {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(-22px, 4px); }
+}
+@keyframes flow-x-reverse {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(20px, -3px); }
+}
+@keyframes line-breathe {
+  0%, 100% { opacity: 0.4; stroke-width: 1; }
+  50% { opacity: 0.75; stroke-width: 1.4; }
+}
+@keyframes spin-slow {
+  to { transform: rotate(360deg); }
+}
 .animate-drift { animation: drift 18s ease-in-out infinite; transform-origin: center; }
 .animate-drift-slow { animation: drift-slow 26s ease-in-out infinite; transform-origin: center; }
 .animate-breathe { animation: breathe 7s ease-in-out infinite; }
 .animate-breathe-slow { animation: breathe 11s ease-in-out infinite; }
 .animate-float-soft { animation: float-soft 9s ease-in-out infinite; }
+.animate-float-a { animation: float-a 11s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.animate-float-b { animation: float-b 14s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.animate-float-c { animation: float-c 12s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+.animate-flow-x { animation: flow-x 22s ease-in-out infinite; }
+.animate-flow-x-reverse { animation: flow-x-reverse 28s ease-in-out infinite; }
+.animate-line-breathe { animation: line-breathe 8s ease-in-out infinite; }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-drift, .animate-drift-slow, .animate-breathe, .animate-breathe-slow, .animate-float-soft {
+  .animate-drift, .animate-drift-slow, .animate-breathe, .animate-breathe-slow,
+  .animate-float-soft, .animate-float-a, .animate-float-b, .animate-float-c,
+  .animate-flow-x, .animate-flow-x-reverse, .animate-line-breathe {
     animation: none !important;
   }
 }
