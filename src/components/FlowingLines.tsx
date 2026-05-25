@@ -101,11 +101,11 @@ function SinePath({
   return (
     <path
       d={d}
-      stroke={grad}
-      strokeWidth={l.w}
+      stroke="#4F46E5"
+      strokeWidth={4}
       strokeLinecap="round"
       fill="none"
-      opacity={l.o}
+      opacity={1}
       className="animate-breathe"
       style={{ animationDuration: `${8 + (l.phase % 3) * 2}s` }}
     />
