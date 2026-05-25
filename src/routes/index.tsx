@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { FlowingLines } from "../components/FlowingLines";
+import { FlowingLines } from "@/components/FlowingLines";
 
 export const Route = createFileRoute("/")({
   component: Home,
@@ -14,8 +14,8 @@ function Home() {
     <>
       {/* Hero — fills first viewport, calm and centered */}
       <section className="relative flex min-h-[calc(100svh-65px)] items-center overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 -z-10">
-          <FlowingLines className="h-full w-full" />
+        <div className="relative z-10">
+          <FlowingLines className="absolute inset-0 z-0 h-full w-full pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/30 to-background" />
         </div>
 
