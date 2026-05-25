@@ -232,49 +232,56 @@ export function DecisionMap({
             );
           })}
 
-          {/* Main influence bubbles — aura + breathing + bigger serif label */}
+          {/* Main influence bubbles — shapes drift/breathe, text stays static */}
           {mains.map((it, idx) => {
             const grad = idx === 0 ? "url(#bubble-purple)" : idx === 1 ? "url(#bubble-lavender)" : "url(#bubble-blue)";
             const auraGrad = idx === 0 ? "url(#aura-purple)" : idx === 1 ? "url(#aura-lavender)" : "url(#aura-blue)";
             const driftClass = idx === 0 ? "animate-float-a" : idx === 1 ? "animate-float-b" : "animate-float-c";
             const isHover = hovered === it.id;
             const isTop = it.importance >= 0.95;
+            const scale = isHover ? 1.07 : 1;
             return (
               <g
                 key={it.id}
                 onMouseEnter={() => setHovered(it.id)}
                 onMouseLeave={() => setHovered(null)}
                 onClick={() => handleClick(it)}
-                className={`cursor-pointer ${driftClass}`}
-                style={{ animationDelay: `${idx * 1.1}s` }}
+                className="cursor-pointer"
               >
+                {/* Shape layer — drifts subtly, scales on hover */}
                 <g
-                  style={{
-                    transformOrigin: `${it.x}px ${it.y}px`,
-                    transform: isHover ? "scale(1.07)" : "scale(1)",
-                    transition: "transform 380ms cubic-bezier(.2,.7,.2,1)",
-                  }}
+                  className={driftClass}
+                  style={{ animationDelay: `${idx * 1.1}s`, transformBox: "fill-box", transformOrigin: "center" }}
                 >
-                  {/* Aura glow — stronger on hover */}
-                  <circle
-                    cx={it.x}
-                    cy={it.y}
-                    r={it.r + 38}
-                    fill={auraGrad}
-                    opacity={isHover ? 0.95 : 0.55}
-                    style={{ transition: "opacity 400ms ease" }}
-                  />
-                  <circle cx={it.x} cy={it.y} r={it.r + 8} fill={grad} opacity="0.35" />
-                  <circle
-                    cx={it.x}
-                    cy={it.y}
-                    r={it.r}
-                    fill={grad}
-                    stroke="oklch(0.45 0.13 285)"
-                    strokeWidth={isHover ? 1.8 : 1.1}
-                    style={{ transition: "stroke-width 300ms ease" }}
-                  />
-                  {/* Small icon at top */}
+                  <g
+                    style={{
+                      transformOrigin: `${it.x}px ${it.y}px`,
+                      transform: `scale(${scale})`,
+                      transition: "transform 380ms cubic-bezier(.2,.7,.2,1)",
+                    }}
+                  >
+                    <circle
+                      cx={it.x}
+                      cy={it.y}
+                      r={it.r + 38}
+                      fill={auraGrad}
+                      opacity={isHover ? 0.95 : 0.55}
+                      style={{ transition: "opacity 400ms ease" }}
+                    />
+                    <circle cx={it.x} cy={it.y} r={it.r + 8} fill={grad} opacity="0.35" />
+                    <circle
+                      cx={it.x}
+                      cy={it.y}
+                      r={it.r}
+                      fill={grad}
+                      stroke="oklch(0.45 0.13 285)"
+                      strokeWidth={isHover ? 1.8 : 1.1}
+                      style={{ transition: "stroke-width 300ms ease" }}
+                    />
+                  </g>
+                </g>
+                {/* Text layer — static, never animated */}
+                <g style={{ pointerEvents: "none" }}>
                   <g transform={`translate(${it.x}, ${it.y - 36})`} opacity="0.78">
                     {it.type === "value" ? (
                       <path d="M 0 -7 L 2.5 -2 L 8 -2 L 3.8 1.5 L 5.5 7 L 0 3.5 L -5.5 7 L -3.8 1.5 L -8 -2 L -2.5 -2 Z" fill="oklch(0.45 0.13 285)" />
@@ -350,48 +357,52 @@ export function DecisionMap({
             />
           ))}
 
-          {/* Center organic decision blob — breathing, serif headline */}
-          <g className="animate-float-soft" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
-            <path
-              d={`M ${CX - 175} ${CY}
-                  C ${CX - 175} ${CY - 85}, ${CX - 95} ${CY - 100}, ${CX - 10} ${CY - 95}
-                  C ${CX + 105} ${CY - 90}, ${CX + 175} ${CY - 65}, ${CX + 175} ${CY + 5}
-                  C ${CX + 175} ${CY + 85}, ${CX + 85} ${CY + 100}, ${CX} ${CY + 95}
-                  C ${CX - 95} ${CY + 90}, ${CX - 175} ${CY + 75}, ${CX - 175} ${CY} Z`}
-              fill="url(#center-fill)"
-              stroke="oklch(0.45 0.13 285)"
-              strokeWidth="1.6"
-            />
-            <text
-              x={CX}
-              y={CY - 64}
-              textAnchor="middle"
-              style={{
-                fontFamily: "Inter, sans-serif",
-                fontSize: 10,
-                fontWeight: 600,
-                fill: "oklch(0.55 0.1 285)",
-                letterSpacing: 2,
-              }}
-            >
-              SINU OTSUS
-            </text>
-            <foreignObject x={CX - 158} y={CY - 50} width={316} height={130}>
-              <div className="flex h-full w-full items-center justify-center px-2 text-center">
-                <p
-                  style={{
-                    fontFamily: "Fraunces, serif",
-                    fontWeight: 600,
-                    fontSize: 26,
-                    lineHeight: 1.18,
-                    letterSpacing: "-0.015em",
-                    color: "oklch(0.22 0.07 275)",
-                  }}
-                >
-                  {clip(centerText || "Sinu otsus", 90)}
-                </p>
-              </div>
-            </foreignObject>
+          {/* Center organic decision blob — shape breathes, text stays static */}
+          <g>
+            <g className="animate-float-soft" style={{ transformBox: "fill-box", transformOrigin: "center" }}>
+              <path
+                d={`M ${CX - 175} ${CY}
+                    C ${CX - 175} ${CY - 85}, ${CX - 95} ${CY - 100}, ${CX - 10} ${CY - 95}
+                    C ${CX + 105} ${CY - 90}, ${CX + 175} ${CY - 65}, ${CX + 175} ${CY + 5}
+                    C ${CX + 175} ${CY + 85}, ${CX + 85} ${CY + 100}, ${CX} ${CY + 95}
+                    C ${CX - 95} ${CY + 90}, ${CX - 175} ${CY + 75}, ${CX - 175} ${CY} Z`}
+                fill="url(#center-fill)"
+                stroke="oklch(0.45 0.13 285)"
+                strokeWidth="1.6"
+              />
+            </g>
+            <g style={{ pointerEvents: "none" }}>
+              <text
+                x={CX}
+                y={CY - 64}
+                textAnchor="middle"
+                style={{
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 10,
+                  fontWeight: 600,
+                  fill: "oklch(0.55 0.1 285)",
+                  letterSpacing: 2,
+                }}
+              >
+                SINU OTSUS
+              </text>
+              <foreignObject x={CX - 158} y={CY - 50} width={316} height={130}>
+                <div className="flex h-full w-full items-center justify-center px-2 text-center">
+                  <p
+                    style={{
+                      fontFamily: "Fraunces, serif",
+                      fontWeight: 600,
+                      fontSize: 26,
+                      lineHeight: 1.18,
+                      letterSpacing: "-0.015em",
+                      color: "oklch(0.22 0.07 275)",
+                    }}
+                  >
+                    {clip(centerText || "Sinu otsus", 90)}
+                  </p>
+                </div>
+              </foreignObject>
+            </g>
           </g>
         </svg>
       </div>
@@ -453,8 +464,8 @@ function PillButton({
       onMouseEnter={onEnter}
       onMouseLeave={onLeave}
       onClick={onClick}
-      className="cursor-pointer animate-float-soft"
-      style={{ animationDelay: `${delay}s`, transformBox: "fill-box", transformOrigin: "center" }}
+      className="cursor-pointer"
+      style={{ transformBox: "fill-box", transformOrigin: "center" }}
     >
       <g
         style={{
