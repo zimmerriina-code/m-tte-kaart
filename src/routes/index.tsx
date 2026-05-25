@@ -14,9 +14,9 @@ function Home() {
     <>
       {/* Hero — fills first viewport, calm and centered */}
 <section className="relative flex min-h-[calc(100svh-65px)] items-center justify-center overflow-hidden bg-background">
-  <FlowingLines className="pointer-events-none absolute inset-0 z-0 h-full w-full opacity-100" />
-  <div className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-b from-transparent via-background/10 to-background" />
-
+  <FlowingLines className="pointer-events-none absolute inset-0 z-[2] h-full w-full opacity-100" />
+<div className="pointer-events-none absolute inset-0 z-[1]" />
+  
   <div className="relative z-10 mx-auto w-full max-w-2xl px-5 py-16 text-center sm:px-8 sm:py-24">
     <h1 className="font-serif text-[2.5rem] leading-[1.08] font-semibold tracking-tight text-navy text-balance sm:text-6xl">
       Sa ei pea kohe teadma vastust.
