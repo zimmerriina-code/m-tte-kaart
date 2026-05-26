@@ -27,10 +27,10 @@ interface Props {
   onSelect?: (it: MapItem) => void;
 }
 
-const W = 1500;
-const H = 980;
-const CX = 750;
-const CY = 480;
+const W = 1520;
+const H = 940;
+const CX = 760;
+const CY = 470;
 
 export function DecisionMap({
   centerText,
@@ -54,20 +54,37 @@ export function DecisionMap({
   // Main influence bubbles: top 2 values + top 1 affected, placed around the center.
   // Larger radii, pushed further from center; most important bubble is the largest.
   const mains = useMemo(() => {
-    const arr = [...byType.value.slice(0, 2), ...byType.affected.slice(0, 1)];
-    const positions = [
-  { x: CX - 480, y: CY - 250, r: 126 },
-  { x: CX - 470, y: CY + 285, r: 116 },
-  { x: CX + 490, y: CY - 20, r: 122 },
-];
-    return arr.slice(0, 3).map((it, i) => ({
-      ...it,
-      x: positions[i].x,
-      y: positions[i].y,
-      r: positions[i].r,
-      strength: it.importance >= 0.95 ? "väga oluline" : it.importance >= 0.78 ? "oluline" : "puudutab",
-    }));
-  }, [byType]);
+  const arr = [...byType.value.slice(0, 2), ...byType.affected.slice(0, 1)];
+
+  const positions = [
+    { x: CX - 520, y: CY - 250, r: 152 },
+    { x: CX - 500, y: CY + 285, r: 150 },
+    { x: CX + 530, y: CY - 10, r: 150 },
+  ];
+
+  const radiusForLabel = (label: string, base: number) => {
+    const len = (label || "").length;
+
+    if (len >= 16) return base + 34;
+    if (len >= 13) return base + 24;
+    if (len >= 10) return base + 14;
+
+    return base;
+  };
+
+  return arr.slice(0, 3).map((it, i) => ({
+    ...it,
+    x: positions[i].x,
+    y: positions[i].y,
+    r: radiusForLabel(it.label, positions[i].r),
+    strength:
+      it.importance >= 0.95
+        ? "väga oluline"
+        : it.importance >= 0.78
+          ? "oluline"
+          : "puudutab",
+  }));
+}, [byType]);
 
   // Left column: motivations. Right column: fears (flowing, not dashed).
   const colPositions = (n: number) => {
@@ -82,13 +99,13 @@ export function DecisionMap({
   const leftPills = useMemo(() => {
     const arr = byType.motivation.slice(0, 4);
     const ys = colPositions(arr.length);
-    return arr.map((it, i) => ({ ...it, x: 160, y: ys[i] }));
+    return arr.map((it, i) => ({ ...it, x: 185, y: ys[i] }));
   }, [byType]);
 
   const rightPills = useMemo(() => {
     const arr = byType.fear.slice(0, 4);
     const ys = colPositions(arr.length);
-    return arr.map((it, i) => ({ ...it, x: W - 160, y: ys[i] }));
+    return arr.map((it, i) => ({ ...it, x: W - 185, y: ys[i] }));
   }, [byType]);
 
   const handleClick = (it: MapItem) => {
@@ -229,9 +246,8 @@ export function DecisionMap({
             const isTop = it.importance >= 0.95;
             const scale = isHover ? 1.06 : 1;
             // text sized relative to bubble radius; bigger bubbles get bigger text
-            const labelSize = Math.round(it.r * 0.3); // ~30 for r=100, ~32 for r=108
-            // wrap long labels into 2 lines
-            const wrapped = wrapLabel(it.label, Math.max(12, Math.floor(it.r / 5)));
+            const labelSize = Math.min(40, Math.max(28, Math.round(it.r * 0.26)));
+            const wrapped = wrapLabel(it.label, Math.max(14, Math.floor(it.r / 4.2)), 2);
             return (
               <g
                 key={it.id}
@@ -459,7 +475,7 @@ function PillButton({
   onEnter: () => void; onLeave: () => void; onClick: () => void;
 }) {
   const text = clip(label, 30);
-  const width = Math.max(170, text.length * 9.2 + 56);
+  const width = Math.max(230, text.length * 12 + 76);
   return (
     <g
       onMouseEnter={onEnter}
@@ -488,10 +504,10 @@ function PillButton({
         )}
         <rect
           x={x - width / 2}
-          y={y - 26}
+          y={y - 40}
           width={width}
-          height={52}
-          rx={26}
+          height={80}
+          rx={40}
           fill="oklch(1 0 0)"
           stroke={hovered ? "oklch(0.45 0.13 285)" : "oklch(0.62 0.11 290)"}
           strokeWidth={hovered ? 1.7 : 1.1}
@@ -504,7 +520,7 @@ function PillButton({
           textAnchor="middle"
           style={{
             fontFamily: "Inter, sans-serif",
-            fontSize: 15,
+            fontSize: 22,
             fontWeight: hovered ? 600 : 500,
             fill: "oklch(0.27 0.07 275)",
             letterSpacing: "-0.005em",
