@@ -23,8 +23,7 @@ function Home() {
     </h1>
 
     <p className="mx-auto mt-7 max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-      Otsuse kaart aitab sul lahti mõtestada suure või segase otsuse eri tahud
-      ja näha selgemalt, mis seda mõjutab.
+      Otsuse kaart aitab sul lahti mõtestada suure või segase otsuse eri tahud, näha selgemalt, mis seda mõjutab ning pakub järgmisi samme.
     </p>
 
     <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
