@@ -7,190 +7,62 @@ export function FlowingLines({ className, reduced = false }: Props) {
   return (
     <svg
       className={className}
-      viewBox="0 0 1600 800"
+      viewBox="0 0 1600 900"
       fill="none"
       preserveAspectRatio="none"
       aria-hidden="true"
     >
-      <g className={reduced ? "" : "animate-flow-x"}>
+      {/* back layer */}
+      <g className={reduced ? "" : "animate-flow-x-slow"}>
         <path
-          d="M -120 420 C 120 300, 300 540, 520 420 S 840 300, 1080 420 S 1360 540, 1720 410"
-          stroke="#4F46E5"
-          strokeWidth="3.2"
-          strokeLinecap="round"
-          fill="none"
-          opacity="0.38"
-        />
-
-        <path
-          d="M -120 500 C 180 360, 430 620, 760 500 S 1120 350, 1720 500"
-          stroke="#7C6EE6"
+          d="M -120 520 C 140 320, 340 710, 620 500 S 1080 300, 1720 560"
+          stroke="#8E82F0"
           strokeWidth="2.4"
           strokeLinecap="round"
+          opacity="0.34"
           fill="none"
-          opacity="0.28"
         />
-
         <path
-          d="M -120 350 C 160 250, 380 470, 640 350 S 1020 250, 1720 360"
-          stroke="#9B8CF0"
-          strokeWidth="1.8"
+          d="M -120 690 C 180 520, 430 820, 760 690 S 1200 520, 1720 700"
+          stroke="#9D92F5"
+          strokeWidth="2"
           strokeLinecap="round"
+          opacity="0.26"
           fill="none"
-          opacity="0.22"
         />
       </g>
 
-      <g className={reduced ? "" : "animate-flow-x-reverse"}>
+      {/* middle layer */}
+      <g className={reduced ? "" : "animate-flow-x-reverse-slow"}>
         <path
-          d="M -120 455 C 160 380, 360 520, 610 455 S 930 360, 1200 450 S 1450 520, 1720 455"
-          stroke="#5B50D6"
-          strokeWidth="2"
+          d="M -120 600 C 180 430, 420 760, 760 600 S 1220 420, 1720 640"
+          stroke="#6D60E8"
+          strokeWidth="4.6"
           strokeLinecap="round"
+          opacity="0.9"
           fill="none"
-          opacity="0.25"
         />
-
         <path
-          d="M -120 565 C 220 440, 470 650, 780 560 S 1160 430, 1720 565"
-          stroke="#A89AF3"
-          strokeWidth="1.6"
+          d="M -120 420 C 180 300, 430 560, 760 420 S 1220 300, 1720 490"
+          stroke="#B0A7F8"
+          strokeWidth="2.2"
           strokeLinecap="round"
+          opacity="0.32"
           fill="none"
-          opacity="0.2"
+        />
+      </g>
+
+      {/* front subtle line */}
+      <g className={reduced ? "" : "animate-flow-x-soft"}>
+        <path
+          d="M -120 760 C 160 610, 420 860, 780 760 S 1240 640, 1720 790"
+          stroke="#7A6EEC"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+          opacity="0.22"
+          fill="none"
         />
       </g>
     </svg>
-  );
-}    },
-    {
-      // counter wave that occasionally crosses the primary
-      d: wave(0, 1600, 470, 100, 360, 180),
-      stroke: "#7C6EE6",
-      w: 1.4,
-      opacity: 0.5,
-      dur: 38,
-      dir: -1,
-    },
-    {
-      // soft low wave
-      d: wave(0, 1600, 620, 80, 300, 90),
-      stroke: "#9B8DEC",
-      w: 1.2,
-      opacity: 0.42,
-      dur: 30,
-      dir: 1,
-    },
-    {
-      // very low pale wave
-      d: wave(0, 1600, 720, 60, 280, 240),
-      stroke: "#B8AEEF",
-      w: 1,
-      opacity: 0.32,
-      dur: 44,
-      dir: -1,
-    },
-  ];
-
-  return (
-    <div className={className} aria-hidden="true">
-      <svg
-        viewBox="0 0 1600 800"
-        preserveAspectRatio="none"
-        className="h-full w-full"
-        fill="none"
-      >
-        {layers.map((l, i) => (
-          <g
-            key={i}
-            style={{
-              animation: `flow-wave-${l.dir === 1 ? "r" : "l"} ${l.dur}s linear infinite`,
-            }}
-          >
-            {/* duplicated path — second copy shifted by +1600 so loop is seamless */}
-            <path
-              d={l.d}
-              stroke={l.stroke}
-              strokeWidth={l.w}
-              strokeLinecap="round"
-              fill="none"
-              opacity={l.opacity}
-            />
-            <path
-              d={shiftPath(l.d, 1600)}
-              stroke={l.stroke}
-              strokeWidth={l.w}
-              strokeLinecap="round"
-              fill="none"
-              opacity={l.opacity}
-            />
-          </g>
-        ))}
-      </svg>
-
-      {/* soft veil to keep hero text readable */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse 70% 55% at 50% 50%, rgba(250,250,253,0.78) 0%, rgba(250,250,253,0.55) 40%, rgba(250,250,253,0.15) 75%, rgba(250,250,253,0) 100%)",
-        }}
-      />
-
-      <style>{`
-        @keyframes flow-wave-l {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(-1600px); }
-        }
-        @keyframes flow-wave-r {
-          0% { transform: translateX(-1600px); }
-          100% { transform: translateX(0); }
-        }
-        @media (prefers-reduced-motion: reduce) {
-          [style*="flow-wave"] { animation: none !important; }
-        }
-      `}</style>
-    </div>
-  );
-}
-
-/**
- * Build a smooth seamless sine wave path from x=startX to x=startX+length
- * centered at baseY, with given amplitude and wavelength.
- * Slight phase variation makes some sections look gently tangled.
- */
-function wave(
-  startX: number,
-  length: number,
-  baseY: number,
-  amplitude: number,
-  wavelength: number,
-  phase: number,
-): string {
-  const segments = Math.ceil(length / (wavelength / 4));
-  const step = length / segments;
-  let d = `M ${startX} ${baseY + amplitude * Math.sin((2 * Math.PI * (startX + phase)) / wavelength)}`;
-  for (let i = 1; i <= segments; i++) {
-    const x0 = startX + (i - 1) * step;
-    const x1 = startX + i * step;
-    const y0 = baseY + amplitude * Math.sin((2 * Math.PI * (x0 + phase)) / wavelength);
-    const y1 = baseY + amplitude * Math.sin((2 * Math.PI * (x1 + phase)) / wavelength);
-    // control points for a soft cubic — gives a smoother, more "thought-stream" feel
-    const cx0 = x0 + step / 2;
-    const cx1 = x1 - step / 2;
-    d += ` C ${cx0} ${y0}, ${cx1} ${y1}, ${x1} ${y1}`;
-  }
-  return d;
-}
-
-/**
- * Shift the M/C path commands by dx on the x axis so the duplicate joins seamlessly.
- */
-function shiftPath(d: string, dx: number): string {
-  return d.replace(/([MC])\s*([-\d.]+)\s+([-\d.]+)(?:,\s*([-\d.]+)\s+([-\d.]+),\s*([-\d.]+)\s+([-\d.]+))?/g,
-    (_m, cmd, a, b, c, dY, e, f) => {
-      if (cmd === "M") return `M ${parseFloat(a) + dx} ${b}`;
-      return `C ${parseFloat(a) + dx} ${b}, ${parseFloat(c) + dx} ${dY}, ${parseFloat(e) + dx} ${f}`;
-    },
   );
 }
