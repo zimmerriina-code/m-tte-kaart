@@ -77,6 +77,7 @@ export function DecisionMap({
     x: positions[i].x,
     y: positions[i].y,
     r: radiusForLabel(it.label, positions[i].r),
+    tone: positions[i].tone,
     strength:
       it.importance >= 0.95
         ? "väga oluline"
@@ -100,35 +101,37 @@ export function DecisionMap({
   const arr = byType.motivation.slice(0, 4);
 
   const positions = [
-    { x: CX - 640, y: CY - 390 },
-    { x: CX - 760, y: CY - 150 },
-    { x: CX - 650, y: CY + 390 },
-    { x: CX - 820, y: CY + 120 },
+    { x: CX - 520, y: CY - 340 }, // üleval vasakul, aga keskele lähemal
+    { x: CX - 680, y: CY - 110 }, // vasakul keskmest kõrgemal
+    { x: CX - 520, y: CY + 300 }, // all vasakul
+    { x: CX - 690, y: CY + 120 }, // vasakul allpool
   ];
 
   return arr.map((it, i) => ({
     ...it,
-    x: positions[i]?.x ?? CX - 700,
-    y: positions[i]?.y ?? CY - 330 + i * 220,
+    x: positions[i]?.x ?? CX - 600,
+    y: positions[i]?.y ?? CY - 250 + i * 160,
+    kind: "motivation",
   }));
-}, [byType]);
+}, [byType, CX, CY]);
 
 const rightPills = useMemo(() => {
   const arr = byType.fear.slice(0, 4);
 
   const positions = [
-    { x: CX + 640, y: CY - 390 }, 
-    { x: CX + 790, y: CY - 130 },  
-    { x: CX + 640, y: CY + 390 }, 
-    { x: CX + 820, y: CY + 120 },
+    { x: CX + 520, y: CY - 340 }, // üleval paremal, aga keskele lähemal
+    { x: CX + 690, y: CY - 110 }, // paremal keskmest kõrgemal
+    { x: CX + 520, y: CY + 300 }, // all paremal
+    { x: CX + 690, y: CY + 120 }, // paremal allpool
   ];
 
   return arr.map((it, i) => ({
     ...it,
-    x: positions[i]?.x ?? CX + 720,
-    y: positions[i]?.y ?? CY - 260 + i * 150,
+    x: positions[i]?.x ?? CX + 600,
+    y: positions[i]?.y ?? CY - 250 + i * 160,
+    kind: "fear",
   }));
-}, [byType]);
+}, [byType, CX, CY]);
 
   const handleClick = (it: MapItem) => {
     setOpened(it);
@@ -389,6 +392,7 @@ const rightPills = useMemo(() => {
               x={it.x}
               y={it.y}
               label={it.label}
+              kind={it.kind}
               hovered={hovered === it.id}
               delay={i * 0.6}
               onEnter={() => setHovered(it.id)}
@@ -402,6 +406,7 @@ const rightPills = useMemo(() => {
               x={it.x}
               y={it.y}
               label={it.label}
+              kind={it.kind}
               hovered={hovered === it.id}
               delay={i * 0.6 + 0.3}
               onEnter={() => setHovered(it.id)}
@@ -444,7 +449,7 @@ const rightPills = useMemo(() => {
                   <p
                     style={{
                       fontFamily: "Fraunces, serif",
-                      fontWeight: 600,
+                      fontWeight: 5900,
                       fontSize: centerFontSize(centerText),
                       lineHeight: 1.14,
                       letterSpacing: "-0.02em",
@@ -507,13 +512,16 @@ const rightPills = useMemo(() => {
 }
 
 function PillButton({
-  x, y, label, hovered, onEnter, onLeave, onClick,
-}: {
+ function PillButton({ x, y, label, hovered, onHover, onLeave, onClick, kind }: PillButtonProps) {
   x: number; y: number; label: string; hovered: boolean; delay?: number;
-  onEnter: () => void; onLeave: () => void; onClick: () => void;
+  onEnter: () => void; onLeave: () => void; onClick: () => void; kind?: "motivation" | "fear";;
 }) {
   const text = clip(label, 30);
   const width = Math.max(230, text.length * 12 + 76);
+  const isFear = kind === "fear";
+  const fill = isFear ? "oklch(0.94 0.03 240)" : "oklch(0.95 0.03 350)";
+  const stroke = isFear ? "oklch(0.72 0.07 245)" : "oklch(0.75 0.06 340)";
+  const textColor = "oklch(0.28 0.06 275)";
   return (
     <g
       onMouseEnter={onEnter}
@@ -541,16 +549,18 @@ function PillButton({
           />
         )}
         <rect
-          x={x - width / 2}
-          y={y - 40}
-          width={width}
-          height={80}
-          rx={40}
-          fill="oklch(1 0 0)"
-          stroke={hovered ? "oklch(0.45 0.13 285)" : "oklch(0.62 0.11 290)"}
-          strokeWidth={hovered ? 1.7 : 1.1}
+          <rect
+            x={x - width / 2}
+            y={y - 30}
+            width={width}
+            height={60}
+            rx={30}
+            fill={fill}
+            stroke={stroke}
+            strokeWidth={1.8}
+          />
           opacity={hovered ? 1 : 0.95}
-          style={{ transition: "stroke-width 200ms ease" }}
+          style={{ fontFamily: "Inter, sans-serif", fontSize: 17, fontWeight: 500, fill: textColor }}
         />
         <text
           x={x}
