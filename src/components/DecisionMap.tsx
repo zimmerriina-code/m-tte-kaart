@@ -97,16 +97,38 @@ export function DecisionMap({
 };
 
   const leftPills = useMemo(() => {
-    const arr = byType.motivation.slice(0, 4);
-    const ys = colPositions(arr.length);
-    return arr.map((it, i) => ({ ...it, x: 185, y: ys[i] }));
-  }, [byType]);
+  const arr = byType.motivation.slice(0, 4);
 
-  const rightPills = useMemo(() => {
-    const arr = byType.fear.slice(0, 4);
-    const ys = colPositions(arr.length);
-    return arr.map((it, i) => ({ ...it, x: W - 185, y: ys[i] }));
-  }, [byType]);
+  const positions = [
+    { x: CX - 690, y: CY - 310 }, // üleval vasakul
+    { x: CX - 760, y: CY - 70 },  // keskelt vasakul
+    { x: CX - 650, y: CY + 300 }, // all vasakul
+    { x: CX - 760, y: CY + 130 }, // lisakoht
+  ];
+
+  return arr.map((it, i) => ({
+    ...it,
+    x: positions[i]?.x ?? CX - 720,
+    y: positions[i]?.y ?? CY - 260 + i * 150,
+  }));
+}, [byType]);
+
+const rightPills = useMemo(() => {
+  const arr = byType.fear.slice(0, 4);
+
+  const positions = [
+    { x: CX + 700, y: CY - 300 }, // üleval paremal
+    { x: CX + 780, y: CY - 40 },  // keskelt paremal
+    { x: CX + 670, y: CY + 300 }, // all paremal
+    { x: CX + 780, y: CY + 130 }, // lisakoht
+  ];
+
+  return arr.map((it, i) => ({
+    ...it,
+    x: positions[i]?.x ?? CX + 720,
+    y: positions[i]?.y ?? CY - 260 + i * 150,
+  }));
+}, [byType]);
 
   const handleClick = (it: MapItem) => {
     setOpened(it);
