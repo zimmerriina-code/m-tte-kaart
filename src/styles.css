@@ -125,7 +125,7 @@
     transform: translateX(0px) translateY(0px);
   }
   50% {
-    transform: translateX(-16px) translateY(6px);
+    transform: translateX(-30px) translateY(18px);
   }
 }
 
@@ -134,7 +134,7 @@
     transform: translateX(0px) translateY(0px);
   }
   50% {
-    transform: translateX(18px) translateY(-4px);
+    transform: translateX(20px) translateY(-8px);
   }
 }
 
